@@ -42,7 +42,6 @@ export default class User extends Component {
   }
 
   apiDataLoad = async (page = 1) => {
-    console.tron.log('apidataload');
     this.setState({ loading: true });
     const { stars } = this.state;
     const { navigation } = this.props;
@@ -50,10 +49,12 @@ export default class User extends Component {
     const response = await api.get(`/users/${user.login}/starred`, {
       params: { page },
     });
-    console.tron.log(`página ${page} resposta ${response.data}`);
     this.setState({
+      page,
       stars:
-        page >= 2 && response.data ? [...stars, response.data] : response.data,
+        page >= 2 && response.data
+          ? [...stars, ...response.data]
+          : response.data,
       loading: false,
       refreshing: false,
       endOfList: response.data.length < 30,
@@ -61,7 +62,6 @@ export default class User extends Component {
   };
 
   loadMore = async () => {
-    console.tron.log('load more');
     const { page, endOfList } = this.state;
     if (endOfList) {
       return;
@@ -70,7 +70,6 @@ export default class User extends Component {
   };
 
   refreshList = () => {
-    console.tron.log('refresh lista');
     const { stars } = this.state;
     if (stars && stars.length > 0) {
       this.setState({ refreshing: false, loading: false });
@@ -96,7 +95,7 @@ export default class User extends Component {
           <Name>{user.name}</Name>
           <Bio>{user.bio}</Bio>
         </Header>
-        {loading ? (
+        {loading && stars.length < 1 ? (
           <ActivityIndicator color="#7159c1" />
         ) : (
           <Stars
