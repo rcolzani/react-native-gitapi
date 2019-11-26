@@ -22,11 +22,6 @@ export default class Repository extends Component {
     const { navigation } = this.props;
     const repository = navigation.getParam('repository');
 
-    return (
-      <WebView
-        source={{ uri: repository.html_url }}
-        style={{ marginTop: 20 }}
-      />
-    );
+    return <WebView source={{ uri: repository.html_url }} />;
   }
 }
